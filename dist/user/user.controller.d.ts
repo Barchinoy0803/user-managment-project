@@ -38,7 +38,7 @@ export declare class UserController {
     updateUserStatus(ids: string | string[], status: USER_STATUS): Promise<{
         message: string;
     }>;
-    removeMany(ids: string[]): Promise<{
+    removeMany(ids: string | string[]): Promise<{
         message: string;
     }>;
 }

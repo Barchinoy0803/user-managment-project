@@ -40,7 +40,8 @@ let UserController = class UserController {
         return this.userService.updateUserStatus(idArray, status);
     }
     async removeMany(ids) {
-        return this.userService.removeMany(ids);
+        const idArray = typeof ids === 'string' ? ids.split(',') : ids;
+        return this.userService.removeMany(idArray);
     }
 };
 exports.UserController = UserController;
@@ -89,7 +90,7 @@ __decorate([
     (0, common_1.Delete)(),
     __param(0, (0, common_1.Query)('ids')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Array]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "removeMany", null);
 exports.UserController = UserController = __decorate([
