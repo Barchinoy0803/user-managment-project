@@ -10,6 +10,7 @@ export class AuthGuard implements CanActivate {
     private prisma: PrismaService
   ) { }
 
+  
   async canActivate(context: ExecutionContext): Promise<boolean> {
 
     let request: Request = context.switchToHttp().getRequest()
