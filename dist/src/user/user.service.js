@@ -11,10 +11,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = void 0;
 const common_1 = require("@nestjs/common");
-const prisma_service_1 = require("src/prisma/prisma.service");
+const prisma_service_1 = require("../prisma/prisma.service");
 const bcrypt = require("bcrypt");
 const jwt_1 = require("@nestjs/jwt");
-const prisma_1 = require("generated/prisma");
+const client_1 = require("@prisma/client");
 let UserService = class UserService {
     constructor(prisma, jwtService) {
         this.prisma = prisma;
@@ -41,7 +41,7 @@ let UserService = class UserService {
             if (!user) {
                 throw new common_1.NotFoundException('This user is not registered!');
             }
-            if (user.status === prisma_1.USER_STATUS.BLOCKED) {
+            if (user.status === client_1.USER_STATUS.BLOCKED) {
                 throw new common_1.BadRequestException("This user is blocked");
             }
             const isPasswordValid = await bcrypt.compare(password, user.password);

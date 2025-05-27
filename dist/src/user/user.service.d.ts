@@ -1,8 +1,8 @@
 import { CreateUserDto } from './dto/create-user.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { LoginUserDto } from './dto/login-user.dto';
-import { User, USER_STATUS } from 'generated/prisma';
+import { User, USER_STATUS } from '@prisma/client';
 export declare class UserService {
     private readonly prisma;
     private readonly jwtService;

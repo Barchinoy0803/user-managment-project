@@ -10,7 +10,7 @@ export declare class UserController {
         email: string;
         password: string;
         id: string;
-        status: import("generated/prisma").$Enums.USER_STATUS | null;
+        status: import(".prisma/client").$Enums.USER_STATUS | null;
         createdAt: Date;
         lastSeen: Date | null;
     }, "password">>;
@@ -22,7 +22,7 @@ export declare class UserController {
         email: string;
         password: string;
         id: string;
-        status: import("generated/prisma").$Enums.USER_STATUS | null;
+        status: import(".prisma/client").$Enums.USER_STATUS | null;
         createdAt: Date;
         lastSeen: Date | null;
     }, "password">[]>;
@@ -31,7 +31,7 @@ export declare class UserController {
         email: string;
         password: string;
         id: string;
-        status: import("generated/prisma").$Enums.USER_STATUS | null;
+        status: import(".prisma/client").$Enums.USER_STATUS | null;
         createdAt: Date;
         lastSeen: Date | null;
     }, "password">>;

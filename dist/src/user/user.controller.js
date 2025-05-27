@@ -18,7 +18,7 @@ const user_service_1 = require("./user.service");
 const create_user_dto_1 = require("./dto/create-user.dto");
 const login_user_dto_1 = require("./dto/login-user.dto");
 const prisma_1 = require("generated/prisma");
-const auth_guard_1 = require("src/guards/auth.guard");
+const auth_guard_1 = require("../guards/auth.guard");
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
