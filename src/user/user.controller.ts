@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } f
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
-import { USER_STATUS } from 'generated/prisma';
+import { USER_STATUS } from '@prisma/client';
 import { AuthGuard } from '../guards/auth.guard';
 
 @Controller('user')
