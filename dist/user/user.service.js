@@ -15,6 +15,7 @@ const prisma_service_1 = require("../prisma/prisma.service");
 const bcrypt = require("bcrypt");
 const jwt_1 = require("@nestjs/jwt");
 const client_1 = require("@prisma/client");
+const helpers_1 = require("../helpers");
 let UserService = class UserService {
     constructor(prisma, jwtService) {
         this.prisma = prisma;
@@ -22,16 +23,19 @@ let UserService = class UserService {
     }
     async register(createUserDto) {
         try {
-            const { password, ...rest } = createUserDto;
+            const { password, lastSeen, createdAt, ...rest } = createUserDto;
             const hashedPassword = await bcrypt.hash(password, 10);
             const user = await this.prisma.user.create({
-                data: { ...rest, password: hashedPassword },
+                data: { ...rest, password: hashedPassword, lastSeen: (0, helpers_1.getTransformedTime)(), createdAt: (0, helpers_1.getTransformedTime)() },
             });
             const { password: _, ...userWithoutPassword } = user;
             return userWithoutPassword;
         }
         catch (error) {
-            throw error;
+            if (error.code === 'P2002' && error.meta?.target?.includes('email')) {
+                throw new common_1.ConflictException('User already registered');
+            }
+            throw new common_1.InternalServerErrorException('Something went wrong');
         }
     }
     async login(loginUserDto) {

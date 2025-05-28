@@ -9,10 +9,10 @@ export declare class UserController {
         name: string;
         email: string;
         password: string;
+        lastSeen: string | null;
+        createdAt: string | null;
         id: string;
         status: import(".prisma/client").$Enums.USER_STATUS | null;
-        createdAt: Date;
-        lastSeen: Date | null;
     }, "password">>;
     login(loginUserDto: LoginUserDto): Promise<{
         token: string;
@@ -21,19 +21,19 @@ export declare class UserController {
         name: string;
         email: string;
         password: string;
+        lastSeen: string | null;
+        createdAt: string | null;
         id: string;
         status: import(".prisma/client").$Enums.USER_STATUS | null;
-        createdAt: Date;
-        lastSeen: Date | null;
     }, "password">[]>;
     findOne(id: string): Promise<Omit<{
         name: string;
         email: string;
         password: string;
+        lastSeen: string | null;
+        createdAt: string | null;
         id: string;
         status: import(".prisma/client").$Enums.USER_STATUS | null;
-        createdAt: Date;
-        lastSeen: Date | null;
     }, "password">>;
     updateUserStatus(ids: string | string[], status: USER_STATUS): Promise<{
         message: string;

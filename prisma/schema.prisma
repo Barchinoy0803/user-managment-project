@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  // output   = "../generated/prisma"
 }
 
 datasource db {
@@ -14,8 +13,8 @@ model User {
   email     String       @unique
   password  String
   status    USER_STATUS? @default(ACTIVE)
-  createdAt DateTime     @default(now())
-  lastSeen  DateTime? 
+  createdAt String?     
+  lastSeen  String? 
 }
 
 enum USER_STATUS {

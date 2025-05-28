@@ -88,7 +88,7 @@ __decorate([
 __decorate([
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Delete)(),
-    __param(0, (0, common_1.Query)('ids')),
+    __param(0, (0, common_1.Body)('ids')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)

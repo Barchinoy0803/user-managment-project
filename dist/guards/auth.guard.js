@@ -13,6 +13,7 @@ exports.AuthGuard = void 0;
 const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const prisma_service_1 = require("../prisma/prisma.service");
+const helpers_1 = require("../helpers");
 let AuthGuard = class AuthGuard {
     constructor(jwtService, prisma) {
         this.jwtService = jwtService;
@@ -28,7 +29,7 @@ let AuthGuard = class AuthGuard {
         try {
             await this.prisma.user.update({
                 where: { id: data.id },
-                data: { lastSeen: new Date() },
+                data: { lastSeen: (0, helpers_1.getTransformedTime)() },
             });
             return true;
         }

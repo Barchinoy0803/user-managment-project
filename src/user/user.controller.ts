@@ -43,7 +43,7 @@ export class UserController {
 
   @UseGuards(AuthGuard)
   @Delete()
-  async removeMany(@Query('ids') ids: string | string[]) {
+  async removeMany(@Body('ids') ids: string | string[]) {
     const idArray = typeof ids === 'string' ? ids.split(',') : ids;
     return this.userService.removeMany(idArray);
   }

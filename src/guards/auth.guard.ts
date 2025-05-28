@@ -2,6 +2,7 @@ import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { PrismaService } from '../prisma/prisma.service';
+import { getTransformedTime } from 'src/helpers';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -24,7 +25,7 @@ export class AuthGuard implements CanActivate {
       try {
       await this.prisma.user.update({
         where: { id: data.id },
-        data: { lastSeen: new Date() },
+        data: { lastSeen: getTransformedTime() },
       });
 
       return true

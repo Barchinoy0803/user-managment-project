@@ -1,6 +1,8 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -9,6 +11,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { LoginUserDto } from './dto/login-user.dto';
 import { User, USER_STATUS } from '@prisma/client';
+import { getTransformedTime } from 'src/helpers';
 
 @Injectable()
 export class UserService {
@@ -19,17 +22,20 @@ export class UserService {
 
   async register(createUserDto: CreateUserDto): Promise<Omit<User, 'password'>> {
     try {
-      const { password, ...rest } = createUserDto;
+      const { password, lastSeen, createdAt, ...rest } = createUserDto;
       const hashedPassword = await bcrypt.hash(password, 10);
 
       const user = await this.prisma.user.create({
-        data: { ...rest, password: hashedPassword },
+        data: { ...rest, password: hashedPassword, lastSeen: getTransformedTime(), createdAt: getTransformedTime() },
       });
 
       const { password: _, ...userWithoutPassword } = user;
       return userWithoutPassword;
     } catch (error) {
-      throw error;
+      if (error.code === 'P2002' && error.meta?.target?.includes('email')) {
+        throw new ConflictException('User already registered');
+      }
+      throw new InternalServerErrorException('Something went wrong');
     }
   }
 
