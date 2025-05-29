@@ -26,7 +26,7 @@ export class AuthGuard implements CanActivate {
         where: { id: data.id },
       });
 
-      if (user.status === 'BLOCKED') {
+      if (user && user.status === 'BLOCKED') {
         throw new ForbiddenException('User is blocked');
       }
       

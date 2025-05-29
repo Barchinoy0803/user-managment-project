@@ -18,15 +18,22 @@ export class UserService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
-  async register(createUserDto: CreateUserDto): Promise<Omit<User, 'password'>> {
+  async register(
+    createUserDto: CreateUserDto,
+  ): Promise<Omit<User, 'password'>> {
     try {
       const { password, lastSeen, createdAt, ...rest } = createUserDto;
       const hashedPassword = await bcrypt.hash(password, 10);
 
       const user = await this.prisma.user.create({
-        data: { ...rest, password: hashedPassword, lastSeen: getTransformedTime(), createdAt: getTransformedTime() },
+        data: {
+          ...rest,
+          password: hashedPassword,
+          lastSeen: getTransformedTime(),
+          createdAt: getTransformedTime(),
+        },
       });
 
       const { password: _, ...userWithoutPassword } = user;
@@ -50,7 +57,7 @@ export class UserService {
       }
 
       if (user.status === USER_STATUS.BLOCKED) {
-        throw new BadRequestException("This user is blocked")
+        throw new BadRequestException('This user is blocked');
       }
 
       const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -78,18 +85,13 @@ export class UserService {
   }
 
   async findAll(
-    sortBy?: 'lastSeen' | 'name' | 'email',
     sortOrder: 'asc' | 'desc' = 'asc',
   ): Promise<Omit<User, 'password'>[]> {
     try {
-      const validSortFields = ['lastSeen', 'name', 'email'];
-      const orderBy =
-        sortBy && validSortFields.includes(sortBy)
-          ? { [sortBy]: sortOrder }
-          : undefined;
-
       const users = await this.prisma.user.findMany({
-        orderBy,
+        orderBy: {
+          email: sortOrder,
+        },
       });
 
       return users.map(({ password, ...rest }) => rest);
@@ -97,7 +99,6 @@ export class UserService {
       throw error;
     }
   }
-
 
   async findOne(id: string): Promise<Omit<User, 'password'>> {
     try {
@@ -116,7 +117,6 @@ export class UserService {
 
   async updateUserStatus(ids: string[], status: USER_STATUS) {
     try {
-
       if (!ids || ids.length === 0) {
         throw new Error('User ID list is required');
       }
@@ -124,16 +124,16 @@ export class UserService {
       let updated = await this.prisma.user.updateMany({
         where: {
           id: {
-            in: ids
+            in: ids,
           },
         },
         data: {
-          status
-        }
-      })
+          status,
+        },
+      });
       return {
-        message: `${updated.count} users updated successfully`
-      }
+        message: `${updated.count} users updated successfully`,
+      };
     } catch (error) {
       throw error;
     }
@@ -146,7 +146,7 @@ export class UserService {
       }
 
       const existingUsers = await this.prisma.user.findMany({
-        where: { id: { in: ids } }
+        where: { id: { in: ids } },
       });
 
       if (existingUsers.length === 0) {
@@ -154,7 +154,7 @@ export class UserService {
       }
 
       const deleted = await this.prisma.user.deleteMany({
-        where: { id: { in: ids } }
+        where: { id: { in: ids } },
       });
 
       return { message: `${deleted.count} user(s) successfully deleted!` };
@@ -162,5 +162,4 @@ export class UserService {
       throw error;
     }
   }
-
 }
