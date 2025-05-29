@@ -84,13 +84,11 @@ export class UserService {
     }
   }
 
-  async findAll(
-    sortOrder: 'asc' | 'desc' = 'asc',
-  ): Promise<Omit<User, 'password'>[]> {
+  async findAll(): Promise<Omit<User, 'password'>[]> {
     try {
       const users = await this.prisma.user.findMany({
         orderBy: {
-          email: sortOrder,
+          email: 'asc',
         },
       });
 
