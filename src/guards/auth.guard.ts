@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException, ForbiddenException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { PrismaService } from '../prisma/prisma.service';
@@ -21,8 +21,16 @@ export class AuthGuard implements CanActivate {
       
       let data = this.jwtService.verify(token, { secret: process.env.ACCESS_SECRET })
       request['user'] = data
+
+      const user = await this.prisma.user.findUnique({
+        where: { id: data.id },
+      });
+
+      if (user.status === 'BLOCKED') {
+        throw new ForbiddenException('User is blocked');
+      }
       
-      try {
+    try {
       await this.prisma.user.update({
         where: { id: data.id },
         data: { lastSeen: getTransformedTime() },
